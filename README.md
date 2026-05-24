@@ -43,11 +43,15 @@ Step 01 provides a runnable scaffold focused on Test Explorer wiring.
    - `Angular Test Explorer: Refresh Tests` to rediscover specs
    - `Angular Test Explorer: Run Selected Tests` to run selected items
 
-Current Step 02 behavior:
+Current Step 03 behavior:
 - Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
 - Populates the Testing tree with discovered spec files
+- Discovers in-file test cases from `describe` / `it` / `test` using a lightweight TypeScript AST pass and adds them as child test items
 - Detects Angular workspace roots from `angular.json` per spec file
 - Maps spec files to Angular projects from `angular.json` (`root` / `sourceRoot`)
 - Executes file-level test runs through Angular CLI via npm:
   - `npm --prefix <workspace> run test -- --project <project> --watch=false --include <specPath>`
+- Attempts single-test execution with:
+  - `--testNamePattern <fullTestName>`
+- Falls back deterministically to file-level execution when current Angular CLI context does not support `--testNamePattern`, and reports fallback in output
 - Streams Angular CLI stdout/stderr to test run output and marks each test item as pass/fail/error

@@ -10,8 +10,10 @@ import {
   loadAngularWorkspaceConfig,
 } from "./core/angularWorkspace";
 import { mapSpecToAngularProject } from "./core/projectMapping";
-import { buildAngularCliCommand } from "./core/angularCommand";
+import { buildAngularCliCommand, type AngularCliCommand } from "./core/angularCommand";
 import { runCliCommand } from "./core/angularRunner";
+import { discoverSpecTests } from "./core/specTestParser";
+import { buildSingleTestItemId, parseSingleTestItemId } from "./core/testIdentity";
 
 const SPEC_GLOB = "**/*.spec.ts";
 
@@ -57,6 +59,16 @@ async function refreshTests(controller: vscode.TestController): Promise<void> {
   for (const file of files) {
     const label = toWorkspaceRelative(file);
     const item = controller.createTestItem(file.toString(), label, file);
+
+    for (const discoveredTest of discoverSpecTests(file.fsPath)) {
+      const child = controller.createTestItem(
+        buildSingleTestItemId(item.id, discoveredTest.fullName),
+        discoveredTest.fullName,
+        file
+      );
+      item.children.add(child);
+    }
+
     controller.items.add(item);
   }
 }
@@ -104,11 +116,14 @@ async function executeAngularTestForItem(
   output: vscode.OutputChannel,
   token?: vscode.CancellationToken
 ): Promise<void> {
-  if (!test.uri) {
+  const singleTestIdentity = parseSingleTestItemId(test.id);
+  const specItem = singleTestIdentity ? test.parent : test;
+
+  if (!specItem?.uri) {
     throw new Error(`Test item '${test.label}' has no file URI.`);
   }
 
-  const specFilePath = test.uri.fsPath;
+  const specFilePath = specItem.uri.fsPath;
   const workspaceRoot = findAngularWorkspaceRoot(specFilePath);
   if (!workspaceRoot) {
     throw new Error(
@@ -119,15 +134,49 @@ async function executeAngularTestForItem(
   const config = loadAngularWorkspaceConfig(workspaceRoot);
   const projectName = mapSpecToAngularProject(workspaceRoot, specFilePath, config);
   const specRelativePath = path.relative(workspaceRoot, specFilePath).replace(/\\/g, "/");
-  const command = buildAngularCliCommand({ workspaceRoot, projectName, specRelativePath });
 
-  const humanCommand = `${command.command} ${command.args.join(" ")}`;
+  const command = buildAngularCliCommand({
+    workspaceRoot,
+    projectName,
+    specRelativePath,
+    testNamePattern: singleTestIdentity?.testNamePattern,
+  });
+
   output.appendLine(`[run] ${test.label}`);
+  let result = await runAngularCommand(command, run, output, token);
+
+  if (singleTestIdentity && shouldFallbackToFileLevel(result) && !token?.isCancellationRequested) {
+    const fallbackCommand = buildAngularCliCommand({ workspaceRoot, projectName, specRelativePath });
+    output.appendLine(
+      `[fallback] Single-test run is unsupported by current Angular CLI context. Retrying file-level run for '${toWorkspaceRelative(specItem.uri)}'.`
+    );
+    run.appendOutput(
+      "[fallback] Single-test run is unsupported by current Angular CLI context. Retrying file-level run.\n"
+    );
+    result = await runAngularCommand(fallbackCommand, run, output, token);
+  }
+
+  applyRunResult(test, result, run, token);
+}
+
+async function runAngularCommand(
+  command: AngularCliCommand,
+  run: vscode.TestRun,
+  output: vscode.OutputChannel,
+  token?: vscode.CancellationToken
+): Promise<Awaited<ReturnType<typeof runCliCommand>>> {
+  const humanCommand = `${command.command} ${command.args.join(" ")}`;
   output.appendLine(`[cmd] ${humanCommand}`);
-  run.appendOutput(`[run] ${test.label}\n[cmd] ${humanCommand}\n`);
+  run.appendOutput(`[cmd] ${humanCommand}\n`);
+  return runCliCommand(command, run, token);
+}
 
-  const result = await runCliCommand(command, run, token);
-
+function applyRunResult(
+  test: vscode.TestItem,
+  result: Awaited<ReturnType<typeof runCliCommand>>,
+  run: vscode.TestRun,
+  token?: vscode.CancellationToken
+): void {
   if (token?.isCancellationRequested || result.timedOut) {
     run.skipped(test);
     return;
@@ -148,6 +197,16 @@ async function executeAngularTestForItem(
   }
 
   run.failed(test, new vscode.TestMessage(`Angular CLI exited with code ${result.exitCode}.`), 0);
+}
+
+function shouldFallbackToFileLevel(result: Awaited<ReturnType<typeof runCliCommand>>): boolean {
+  if (result.exitCode === 0 || result.exitCode === null || result.timedOut) {
+    return false;
+  }
+
+  return /unknown (argument|option).*testnamepattern|not recognized.*testnamepattern/i.test(
+    result.combinedOutput
+  );
 }
 
 async function collectTestsForRun(

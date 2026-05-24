@@ -5,6 +5,11 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- Step 03 single-test support:
+  - best-effort in-file test discovery for `describe` / `it` / `test` using TypeScript AST traversal
+  - child test items in the Testing tree for discovered in-file tests
+  - single-test Angular CLI command support via `--testNamePattern <fullTestName>`
+  - deterministic fallback to file-level execution when `--testNamePattern` is unsupported by current Angular CLI context, with explicit fallback output
 - Step 02 Angular CLI runner wiring:
   - Angular workspace detection via `angular.json`
   - spec-to-project mapping from `angular.json` (`root` / `sourceRoot`)
@@ -12,6 +17,7 @@ All notable changes to this repository are documented here.
   - stdout/stderr streaming into VS Code test run output
   - pass/fail/error test result mapping from CLI process outcomes
 - Unit tests for Angular project mapping and Angular CLI command construction behavior.
+- Unit tests for spec test discovery and single-test item identity parsing.
 - Step 01 extension scaffold with a TypeScript-only VS Code Testing API integration:
   - `package.json` activation events and commands for Testing view usage
   - `src/extension.ts` with `TestController` bootstrap and a `**/*.spec.ts` discovery flow
@@ -23,6 +29,7 @@ All notable changes to this repository are documented here.
 - `README.md` now includes a `How to Use` section for the first runnable extension behavior, including setup and Testing view workflow.
 - `version.json` minor milestone advanced from `0.1` to `0.2` after clearing prompt milestone 01.
 - `version.json` minor milestone advanced from `0.2` to `0.3` after clearing prompt milestone 02.
+- `version.json` minor milestone advanced from `0.3` to `0.4` after clearing prompt milestone 03.
 
 ## [0.1.0] - 2026-05-24
 ### Added

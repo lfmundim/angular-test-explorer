@@ -6,6 +6,7 @@ export interface CliRunResult {
   exitCode: number | null;
   signal: NodeJS.Signals | null;
   timedOut: boolean;
+  combinedOutput: string;
 }
 
 export async function runCliCommand(
@@ -21,6 +22,7 @@ export async function runCliCommand(
 
     let settled = false;
     let timedOut = false;
+    let combinedOutput = "";
 
     const onCancel = token?.onCancellationRequested(() => {
       timedOut = true;
@@ -28,11 +30,15 @@ export async function runCliCommand(
     });
 
     child.stdout.on("data", (chunk: Buffer) => {
-      run.appendOutput(chunk.toString());
+      const text = chunk.toString();
+      combinedOutput += text;
+      run.appendOutput(text);
     });
 
     child.stderr.on("data", (chunk: Buffer) => {
-      run.appendOutput(chunk.toString());
+      const text = chunk.toString();
+      combinedOutput += text;
+      run.appendOutput(text);
     });
 
     child.on("error", (error) => {
@@ -52,7 +58,7 @@ export async function runCliCommand(
 
       settled = true;
       onCancel?.dispose();
-      resolve({ exitCode, signal, timedOut });
+      resolve({ exitCode, signal, timedOut, combinedOutput });
     });
   });
 }
