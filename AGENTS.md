@@ -39,6 +39,8 @@ This repository maintains sequential prompt packs used to build a VS Code Angula
 - Prefer concrete inputs/outputs over broad guidance.
 - Include error-handling expectations where relevant.
 - Keep each prompt short enough to remain easy to execute by coding agents.
+- For code changes, add automated tests for all behavior that is reasonably unit/integration testable in-repo.
+- If a testable behavior is intentionally left without tests, document the reason in the change notes or PR description.
 
 ## Change Management
 - Make small, focused commits.

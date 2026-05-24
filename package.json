@@ -1,0 +1,42 @@
+{
+  "name": "angular-test-explorer",
+  "displayName": "Angular Test Explorer",
+  "description": "Discover and run Angular spec files in the VS Code Testing view.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Testing"
+  ],
+  "activationEvents": [
+    "onView:workbench.view.testing",
+    "onCommand:angularTestExplorer.refreshTests",
+    "onCommand:angularTestExplorer.runSelectedTests"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "angularTestExplorer.refreshTests",
+        "title": "Angular Test Explorer: Refresh Tests"
+      },
+      {
+        "command": "angularTestExplorer.runSelectedTests",
+        "title": "Angular Test Explorer: Run Selected Tests"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "tsc -p ./ --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test out-test/test/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.4"
+  }
+}

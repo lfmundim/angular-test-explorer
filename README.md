@@ -24,3 +24,26 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 - Replacing Angular test infrastructure
 - Custom bundling pipeline
 - Snapshot tooling beyond what Angular CLI already supports
+
+## How to Use
+
+Step 01 provides a runnable scaffold focused on Test Explorer wiring.
+
+1. Install dependencies:
+   - `npm install`
+2. Build the extension:
+   - `npm run build`
+3. Run unit tests:
+   - `npm test`
+4. Open this repository in VS Code.
+5. Press `F5` to launch the Extension Development Host.
+6. In the new window, open a workspace that contains `*.spec.ts` files.
+7. Open the Testing view.
+8. Run:
+   - `Angular Test Explorer: Refresh Tests` to rediscover specs
+   - `Angular Test Explorer: Run Selected Tests` to run selected items
+
+Current Step 01 behavior:
+- Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
+- Populates the Testing tree with discovered spec files
+- Runs selected/all discovered test items through a scaffold run profile
