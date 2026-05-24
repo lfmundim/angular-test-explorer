@@ -25,16 +25,6 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 - Custom bundling pipeline
 - Snapshot tooling beyond what Angular CLI already supports
 
-## Suggested Stack
-
-- TypeScript
-- VS Code Extension API (`vscode.TestController`)
-- Child process execution for Angular CLI
-
-## Prompt Pack
-
-See [prompts](./prompts) for concise prompts to scaffold and iterate this extension with coding agents.
-
 ## License
 
 MIT
