@@ -4,7 +4,7 @@
   "description": "Discover and run Angular spec files in the VS Code Testing view.",
   "icon": "icon.png",
   "version": "0.1.0",
-  "publisher": "local",
+  "publisher": "kimdim",
   "repository": {
     "type": "git",
     "url": "https://github.com/lfmundim/angular-test-explorer.git"

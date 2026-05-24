@@ -5,6 +5,10 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- CI publish automation for VS Code Marketplace:
+  - tag trigger on `v*` for prerelease publishing
+  - manual `workflow_dispatch` release channel selection (`prerelease` or `stable`)
+  - secure publish via repository secret `VSCE_PAT`
 - Step 05 packaging and release readiness:
   - expanded final prompt (`prompts/05-packaging-and-release.md`) with deterministic requirements and acceptance checks
   - README packaging section with explicit VSIX build instructions
@@ -49,6 +53,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- `package.json` publisher updated from `local` to `kimdim` for Marketplace publishing.
 - `README.md` now includes explicit configuration reference and troubleshooting sections, and milestone wording aligned with prompt step 05 behavior.
 - `version.json` minor milestone advanced from `0.5` to `0.6` after clearing prompt milestone 05.
 - `README.md` now includes a `How to Use` section for the first runnable extension behavior, including setup and Testing view workflow.
