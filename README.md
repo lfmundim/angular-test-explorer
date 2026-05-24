@@ -3,6 +3,10 @@
 [![CD](https://github.com/lfmundim/angular-test-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/lfmundim/angular-test-explorer/actions/workflows/ci.yml)
 [![VS Marketplace](https://vsmarketplacebadges.dev/version-short/kimdim.kimdim-angular-test-explorer.svg)](https://marketplace.visualstudio.com/items?itemName=kimdim.kimdim-angular-test-explorer)
 
+<p align="center">
+  <img src="icon.png" alt="Logo" width="50%" />
+</p>
+
 VS Code extension concept to show and run Angular unit tests in Test Explorer by executing the Angular CLI test builder (`ng test`) instead of plain Vitest.
 
 ## Why
