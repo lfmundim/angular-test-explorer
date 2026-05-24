@@ -66,3 +66,30 @@ Current Step 04 behavior:
 - Supports cancellation by terminating the in-flight Angular CLI process
 - Automatically refreshes discovered tests (debounced) when `*.spec.ts`, `angular.json`, or extension settings change
 - Reports actionable diagnostics for missing Angular CLI/tooling context and project mapping failures
+
+## Screenshots (Placeholders)
+
+- `docs/images/testing-view.png` (placeholder)
+- `docs/images/single-test-run.png` (placeholder)
+- `docs/images/fallback-output.png` (placeholder)
+
+## Packaging and Release
+
+Build and validate before packaging:
+
+1. Install dependencies:
+   - `npm install`
+2. Run lint and tests:
+   - `npm run lint`
+   - `npm test`
+3. Build extension output:
+   - `npm run build`
+4. Package VSIX:
+   - `npx @vscode/vsce package --pre-release`
+
+Expected artifact:
+- `./angular-test-explorer-<version>.vsix`
+
+Notes:
+- CI syncs `package.json` version from `version.json` using Nerdbank.GitVersioning before packaging.
+- CI currently packages as prerelease using `--pre-release`.

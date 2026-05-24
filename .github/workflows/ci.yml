@@ -6,6 +6,49 @@ on:
   pull_request:
 
 jobs:
+  extension-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Nerdbank.GitVersioning tool
+        run: dotnet tool install --global nbgv
+
+      - name: Sync package version from version.json
+        run: |
+          set -euo pipefail
+          VERSION="$(nbgv get-version -v NuGetPackageVersion)"
+          echo "Resolved version: ${VERSION}"
+          export VERSION
+          node -e 'const fs=require("fs"); const p="package.json"; const j=JSON.parse(fs.readFileSync(p,"utf8")); j.version=process.env.VERSION; fs.writeFileSync(p, JSON.stringify(j, null, 2) + "\n");'
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Package VSIX
+        run: npx @vscode/vsce package --pre-release
+
   docs-and-structure:
     runs-on: ubuntu-latest
     steps:

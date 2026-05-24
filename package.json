@@ -5,6 +5,10 @@
   "icon": "icon.png",
   "version": "0.1.0",
   "publisher": "local",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lfmundim/angular-test-explorer.git"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },

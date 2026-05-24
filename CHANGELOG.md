@@ -5,6 +5,15 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- Step 05 packaging and release readiness:
+  - expanded final prompt (`prompts/05-packaging-and-release.md`) with deterministic requirements and acceptance checks
+  - README packaging section with explicit VSIX build instructions
+  - README screenshot placeholder section for marketplace documentation completeness
+  - CI extension-quality job that runs lint, tests, build, and VSIX packaging on push/PR
+  - package manifest `repository` metadata for marketplace/release completeness
+  - `.vscodeignore` to keep VSIX contents focused on runtime assets
+  - CI version-sync step that derives `package.json` version from `version.json` via Nerdbank.GitVersioning before VSIX packaging
+  - prerelease VSIX packaging in CI using `vsce package --pre-release`
 - Step 04 hardening and UX:
   - debounced auto-refresh wiring for `**/*.spec.ts` and `**/angular.json` changes
   - refresh trigger on `angularTestExplorer.*` setting changes
@@ -40,6 +49,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- `version.json` minor milestone advanced from `0.5` to `0.6` after clearing prompt milestone 05.
 - `README.md` now includes a `How to Use` section for the first runnable extension behavior, including setup and Testing view workflow.
 - `version.json` minor milestone advanced from `0.1` to `0.2` after clearing prompt milestone 01.
 - `version.json` minor milestone advanced from `0.2` to `0.3` after clearing prompt milestone 02.

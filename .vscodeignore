@@ -1,0 +1,11 @@
+.github/**
+.git/**
+node_modules/**
+out-test/**
+prompts/**
+src/**
+test/**
+tsconfig*.json
+AGENTS.md
+CONTRIBUTING.md
+version.json
