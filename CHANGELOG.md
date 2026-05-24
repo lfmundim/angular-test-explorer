@@ -6,6 +6,7 @@ All notable changes to this repository are documented here.
 
 ### Added
 - CI publish automation for VS Code Marketplace:
+  - prerelease publish on every push to `main`, with package version synced from `version.json` (Nerdbank.GitVersioning)
   - tag trigger on `v*` for prerelease publishing
   - manual `workflow_dispatch` release channel selection (`prerelease` or `stable`)
   - secure publish via repository secret `VSCE_PAT`
