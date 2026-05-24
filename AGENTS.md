@@ -16,6 +16,24 @@ This repository maintains sequential prompt packs used to build a VS Code Angula
 - Do not duplicate large sections across files; reference shared constraints conceptually.
 - If a new requirement affects multiple steps, update `00-common.md` first.
 
+## Documentation Rules
+- Any code change that adjusts behavior must update `README.md` with clear "how to use" guidance for the changed behavior.
+- The first implementation commit that introduces runnable extension behavior must add a `How to Use` section in `README.md`.
+- Keep usage docs concise, task-oriented, and consistent with current behavior.
+
+## Changelog Rules
+- Maintain `CHANGELOG.md` for every change that is relevant to users or contributors.
+- For each entry, explain what changed and why in concise terms.
+- Do not add excessive internal detail; focus on externally meaningful impact.
+
+## Versioning Rules
+- Use Nerdbank.GitVersioning (`version.json`) for semantic versioning from git history.
+- Current baseline is `0.1.Y`, where:
+  - `0` is major while the project is pre-1.0.
+  - `1` is the current prompt milestone counter (`X`).
+  - `Y` is git height as computed by GitVersioning.
+- Increment minor (`X`) by `+1` when a new prompt milestone is cleared.
+
 ## Quality Rules
 - Prompts must be actionable and testable.
 - Prefer concrete inputs/outputs over broad guidance.
