@@ -54,6 +54,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- Extension activation now guards initial test discovery errors so command registration remains available even when a workspace file fails discovery at startup.
 - Extension identity renamed across the repository to `kimdim-angular-test-explorer` / `Kimdim Angular Test Explorer` to avoid VS Marketplace display-name conflicts.
 - Marketplace publish job now builds extension output (`npm run build`) before `vsce publish`, fixing missing entrypoint failures in CI.
 - CI link-check job now allows empty-link scans (`failIfEmpty: false`) so docs without URLs do not fail the pipeline.

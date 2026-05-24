@@ -51,7 +51,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(refresh, runSelected);
   registerAutoRefresh(context, controller);
-  await refreshTests(controller);
+  try {
+    await refreshTests(controller);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    output.appendLine(`[error] Initial test discovery failed: ${message}`);
+  }
 }
 
 function registerAutoRefresh(
@@ -105,13 +110,17 @@ async function refreshTests(controller: vscode.TestController): Promise<void> {
     const label = toWorkspaceRelative(file);
     const item = controller.createTestItem(file.toString(), label, file);
 
-    for (const discoveredTest of discoverSpecTests(file.fsPath)) {
-      const child = controller.createTestItem(
-        buildSingleTestItemId(item.id, discoveredTest.fullName),
-        discoveredTest.fullName,
-        file
-      );
-      item.children.add(child);
+    try {
+      for (const discoveredTest of discoverSpecTests(file.fsPath)) {
+        const child = controller.createTestItem(
+          buildSingleTestItemId(item.id, discoveredTest.fullName),
+          discoveredTest.fullName,
+          file
+        );
+        item.children.add(child);
+      }
+    } catch {
+      // Keep discovery resilient even if one spec file cannot be parsed.
     }
 
     controller.items.add(item);
