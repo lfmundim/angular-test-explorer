@@ -5,6 +5,13 @@ import {
   isTestItemLike,
   resolveCommandTargets,
 } from "./core/testSelection";
+import {
+  findAngularWorkspaceRoot,
+  loadAngularWorkspaceConfig,
+} from "./core/angularWorkspace";
+import { mapSpecToAngularProject } from "./core/projectMapping";
+import { buildAngularCliCommand } from "./core/angularCommand";
+import { runCliCommand } from "./core/angularRunner";
 
 const SPEC_GLOB = "**/*.spec.ts";
 
@@ -77,13 +84,70 @@ async function runTests(
 
     run.enqueued(test);
     run.started(test);
-    output.appendLine(`[run] ${test.label}`);
 
-    // Step 01 scaffold behavior: mark discovered specs as passed.
-    run.passed(test, 0);
+    try {
+      await executeAngularTestForItem(test, run, output, token);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      output.appendLine(`[error] ${test.label}: ${message}`);
+      run.appendOutput(`[error] ${test.label}: ${message}\n`);
+      run.errored(test, new vscode.TestMessage(message), 0);
+    }
   }
 
   run.end();
+}
+
+async function executeAngularTestForItem(
+  test: vscode.TestItem,
+  run: vscode.TestRun,
+  output: vscode.OutputChannel,
+  token?: vscode.CancellationToken
+): Promise<void> {
+  if (!test.uri) {
+    throw new Error(`Test item '${test.label}' has no file URI.`);
+  }
+
+  const specFilePath = test.uri.fsPath;
+  const workspaceRoot = findAngularWorkspaceRoot(specFilePath);
+  if (!workspaceRoot) {
+    throw new Error(
+      `Could not find angular.json for '${specFilePath}'. Ensure the file is inside an Angular workspace.`
+    );
+  }
+
+  const config = loadAngularWorkspaceConfig(workspaceRoot);
+  const projectName = mapSpecToAngularProject(workspaceRoot, specFilePath, config);
+  const specRelativePath = path.relative(workspaceRoot, specFilePath).replace(/\\/g, "/");
+  const command = buildAngularCliCommand({ workspaceRoot, projectName, specRelativePath });
+
+  const humanCommand = `${command.command} ${command.args.join(" ")}`;
+  output.appendLine(`[run] ${test.label}`);
+  output.appendLine(`[cmd] ${humanCommand}`);
+  run.appendOutput(`[run] ${test.label}\n[cmd] ${humanCommand}\n`);
+
+  const result = await runCliCommand(command, run, token);
+
+  if (token?.isCancellationRequested || result.timedOut) {
+    run.skipped(test);
+    return;
+  }
+
+  if (result.exitCode === 0) {
+    run.passed(test, 0);
+    return;
+  }
+
+  if (result.exitCode === null) {
+    run.errored(
+      test,
+      new vscode.TestMessage(`Angular CLI process terminated by signal '${result.signal ?? "unknown"}'.`),
+      0
+    );
+    return;
+  }
+
+  run.failed(test, new vscode.TestMessage(`Angular CLI exited with code ${result.exitCode}.`), 0);
 }
 
 async function collectTestsForRun(

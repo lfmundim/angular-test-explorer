@@ -5,6 +5,13 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- Step 02 Angular CLI runner wiring:
+  - Angular workspace detection via `angular.json`
+  - spec-to-project mapping from `angular.json` (`root` / `sourceRoot`)
+  - file-level Angular CLI test command construction and execution through npm
+  - stdout/stderr streaming into VS Code test run output
+  - pass/fail/error test result mapping from CLI process outcomes
+- Unit tests for Angular project mapping and Angular CLI command construction behavior.
 - Step 01 extension scaffold with a TypeScript-only VS Code Testing API integration:
   - `package.json` activation events and commands for Testing view usage
   - `src/extension.ts` with `TestController` bootstrap and a `**/*.spec.ts` discovery flow
@@ -15,6 +22,7 @@ All notable changes to this repository are documented here.
 ### Changed
 - `README.md` now includes a `How to Use` section for the first runnable extension behavior, including setup and Testing view workflow.
 - `version.json` minor milestone advanced from `0.1` to `0.2` after clearing prompt milestone 01.
+- `version.json` minor milestone advanced from `0.2` to `0.3` after clearing prompt milestone 02.
 
 ## [0.1.0] - 2026-05-24
 ### Added

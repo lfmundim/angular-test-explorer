@@ -9,6 +9,7 @@ dist/
 # Test and coverage
 coverage/
 .vscode-test/
+out-test/*
 
 # Logs
 npm-debug.log*
