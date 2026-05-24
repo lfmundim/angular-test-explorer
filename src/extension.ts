@@ -14,8 +14,10 @@ import { buildAngularCliCommand, type AngularCliCommand } from "./core/angularCo
 import { runCliCommand } from "./core/angularRunner";
 import { discoverSpecTests } from "./core/specTestParser";
 import { buildSingleTestItemId, parseSingleTestItemId } from "./core/testIdentity";
+import { getExtensionConfiguration, resolveWorkspaceOverridePath } from "./core/configuration";
 
 const SPEC_GLOB = "**/*.spec.ts";
+const REFRESH_DEBOUNCE_MS = 250;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const controller = vscode.tests.createTestController(
@@ -48,7 +50,50 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
 
   context.subscriptions.push(refresh, runSelected);
+  registerAutoRefresh(context, controller);
   await refreshTests(controller);
+}
+
+function registerAutoRefresh(
+  context: vscode.ExtensionContext,
+  controller: vscode.TestController
+): void {
+  let refreshTimer: NodeJS.Timeout | undefined;
+
+  const scheduleRefresh = () => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
+
+    refreshTimer = setTimeout(async () => {
+      refreshTimer = undefined;
+      await refreshTests(controller);
+    }, REFRESH_DEBOUNCE_MS);
+  };
+
+  const specWatcher = vscode.workspace.createFileSystemWatcher(SPEC_GLOB);
+  const angularWatcher = vscode.workspace.createFileSystemWatcher("**/angular.json");
+  const settingsWatcher = vscode.workspace.onDidChangeConfiguration((event) => {
+    if (event.affectsConfiguration("angularTestExplorer")) {
+      scheduleRefresh();
+    }
+  });
+
+  specWatcher.onDidCreate(scheduleRefresh);
+  specWatcher.onDidChange(scheduleRefresh);
+  specWatcher.onDidDelete(scheduleRefresh);
+  angularWatcher.onDidCreate(scheduleRefresh);
+  angularWatcher.onDidChange(scheduleRefresh);
+  angularWatcher.onDidDelete(scheduleRefresh);
+
+  context.subscriptions.push(specWatcher, angularWatcher, settingsWatcher);
+  context.subscriptions.push(
+    new vscode.Disposable(() => {
+      if (refreshTimer) {
+        clearTimeout(refreshTimer);
+      }
+    })
+  );
 }
 
 async function refreshTests(controller: vscode.TestController): Promise<void> {
@@ -124,15 +169,19 @@ async function executeAngularTestForItem(
   }
 
   const specFilePath = specItem.uri.fsPath;
-  const workspaceRoot = findAngularWorkspaceRoot(specFilePath);
+  const config = getExtensionConfiguration();
+  const workspaceRoot = config.workspacePathOverride
+    ? resolveWorkspaceOverridePath(specItem.uri, config.workspacePathOverride)
+    : findAngularWorkspaceRoot(specFilePath);
+
   if (!workspaceRoot) {
     throw new Error(
       `Could not find angular.json for '${specFilePath}'. Ensure the file is inside an Angular workspace.`
     );
   }
 
-  const config = loadAngularWorkspaceConfig(workspaceRoot);
-  const projectName = mapSpecToAngularProject(workspaceRoot, specFilePath, config);
+  const workspaceConfig = loadAngularWorkspaceConfig(workspaceRoot);
+  const projectName = mapSpecToAngularProject(workspaceRoot, specFilePath, workspaceConfig);
   const specRelativePath = path.relative(workspaceRoot, specFilePath).replace(/\\/g, "/");
 
   const command = buildAngularCliCommand({
@@ -140,13 +189,21 @@ async function executeAngularTestForItem(
     projectName,
     specRelativePath,
     testNamePattern: singleTestIdentity?.testNamePattern,
+    watch: config.defaultWatchMode,
+    commandTemplate: config.commandTemplateOverride,
   });
 
   output.appendLine(`[run] ${test.label}`);
   let result = await runAngularCommand(command, run, output, token);
 
   if (singleTestIdentity && shouldFallbackToFileLevel(result) && !token?.isCancellationRequested) {
-    const fallbackCommand = buildAngularCliCommand({ workspaceRoot, projectName, specRelativePath });
+    const fallbackCommand = buildAngularCliCommand({
+      workspaceRoot,
+      projectName,
+      specRelativePath,
+      watch: config.defaultWatchMode,
+      commandTemplate: config.commandTemplateOverride,
+    });
     output.appendLine(
       `[fallback] Single-test run is unsupported by current Angular CLI context. Retrying file-level run for '${toWorkspaceRelative(specItem.uri)}'.`
     );
@@ -187,6 +244,17 @@ function applyRunResult(
     return;
   }
 
+  if (isMissingAngularCli(result.combinedOutput)) {
+    run.errored(
+      test,
+      new vscode.TestMessage(
+        "Angular CLI is not available in this workspace test command context. Ensure '@angular/cli' is installed and the npm test script resolves 'ng test'."
+      ),
+      0
+    );
+    return;
+  }
+
   if (result.exitCode === null) {
     run.errored(
       test,
@@ -197,6 +265,12 @@ function applyRunResult(
   }
 
   run.failed(test, new vscode.TestMessage(`Angular CLI exited with code ${result.exitCode}.`), 0);
+}
+
+function isMissingAngularCli(output: string): boolean {
+  return /(?:ng:\s*command not found|cannot find module ['"]@angular\/cli|could not determine executable to run)/i.test(
+    output
+  );
 }
 
 function shouldFallbackToFileLevel(result: Awaited<ReturnType<typeof runCliCommand>>): boolean {

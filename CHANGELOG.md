@@ -5,6 +5,16 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- Step 04 hardening and UX:
+  - debounced auto-refresh wiring for `**/*.spec.ts` and `**/angular.json` changes
+  - refresh trigger on `angularTestExplorer.*` setting changes
+  - new extension settings:
+    - `angularTestExplorer.workspacePathOverride`
+    - `angularTestExplorer.commandTemplateOverride`
+    - `angularTestExplorer.defaultWatchMode`
+  - configurable Angular command construction via template placeholders:
+    `{workspace}`, `{project}`, `{spec}`, `{watch}`, `{testNamePattern}`
+  - improved actionable diagnostics for missing Angular CLI command context
 - Step 03 single-test support:
   - best-effort in-file test discovery for `describe` / `it` / `test` using TypeScript AST traversal
   - child test items in the Testing tree for discovered in-file tests
@@ -17,6 +27,9 @@ All notable changes to this repository are documented here.
   - stdout/stderr streaming into VS Code test run output
   - pass/fail/error test result mapping from CLI process outcomes
 - Unit tests for Angular project mapping and Angular CLI command construction behavior.
+- Additional unit tests for:
+  - command construction watch-mode + template override behavior
+  - project mapping no-projects failure path
 - Unit tests for spec test discovery and single-test item identity parsing.
 - Marketplace icon wiring in `package.json` with repository root `icon.png`.
 - Step 01 extension scaffold with a TypeScript-only VS Code Testing API integration:
@@ -31,6 +44,7 @@ All notable changes to this repository are documented here.
 - `version.json` minor milestone advanced from `0.1` to `0.2` after clearing prompt milestone 01.
 - `version.json` minor milestone advanced from `0.2` to `0.3` after clearing prompt milestone 02.
 - `version.json` minor milestone advanced from `0.3` to `0.4` after clearing prompt milestone 03.
+- `version.json` minor milestone advanced from `0.4` to `0.5` after clearing prompt milestone 04.
 
 ## [0.1.0] - 2026-05-24
 ### Added

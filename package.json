@@ -18,6 +18,26 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Angular Test Explorer",
+      "properties": {
+        "angularTestExplorer.workspacePathOverride": {
+          "type": "string",
+          "default": "",
+          "description": "Optional workspace path override used to locate angular.json. Relative paths resolve from the active workspace folder."
+        },
+        "angularTestExplorer.commandTemplateOverride": {
+          "type": "string",
+          "default": "",
+          "description": "Optional test command template. Supported placeholders: {workspace}, {project}, {spec}, {watch}, {testNamePattern}."
+        },
+        "angularTestExplorer.defaultWatchMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Default watch mode passed to Angular CLI test runs."
+        }
+      }
+    },
     "commands": [
       {
         "command": "angularTestExplorer.refreshTests",

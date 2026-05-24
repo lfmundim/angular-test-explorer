@@ -48,6 +48,15 @@ export async function runCliCommand(
 
       settled = true;
       onCancel?.dispose();
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        reject(
+          new Error(
+            `Failed to start command '${cmd.command}'. Ensure Node.js/npm and Angular CLI tooling are installed and available in PATH.`
+          )
+        );
+        return;
+      }
+
       reject(error);
     });
 

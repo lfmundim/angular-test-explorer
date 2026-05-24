@@ -43,15 +43,26 @@ Step 01 provides a runnable scaffold focused on Test Explorer wiring.
    - `Angular Test Explorer: Refresh Tests` to rediscover specs
    - `Angular Test Explorer: Run Selected Tests` to run selected items
 
-Current Step 03 behavior:
+Current Step 04 behavior:
 - Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
 - Populates the Testing tree with discovered spec files
 - Discovers in-file test cases from `describe` / `it` / `test` using a lightweight TypeScript AST pass and adds them as child test items
 - Detects Angular workspace roots from `angular.json` per spec file
+- Supports optional workspace root override via setting:
+  - `angularTestExplorer.workspacePathOverride`
 - Maps spec files to Angular projects from `angular.json` (`root` / `sourceRoot`)
 - Executes file-level test runs through Angular CLI via npm:
   - `npm --prefix <workspace> run test -- --project <project> --watch=false --include <specPath>`
+- Supports configurable command template via:
+  - `angularTestExplorer.commandTemplateOverride`
+  - placeholders: `{workspace}`, `{project}`, `{spec}`, `{watch}`, `{testNamePattern}`
+  - quote placeholders when values may include spaces, for example: `--testNamePattern "{testNamePattern}"`
+- Supports default watch behavior via:
+  - `angularTestExplorer.defaultWatchMode` (default `false`)
 - Attempts single-test execution with:
   - `--testNamePattern <fullTestName>`
 - Falls back deterministically to file-level execution when current Angular CLI context does not support `--testNamePattern`, and reports fallback in output
 - Streams Angular CLI stdout/stderr to test run output and marks each test item as pass/fail/error
+- Supports cancellation by terminating the in-flight Angular CLI process
+- Automatically refreshes discovered tests (debounced) when `*.spec.ts`, `angular.json`, or extension settings change
+- Reports actionable diagnostics for missing Angular CLI/tooling context and project mapping failures

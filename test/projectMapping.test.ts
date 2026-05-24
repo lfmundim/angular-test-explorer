@@ -44,3 +44,10 @@ test("mapSpecToAngularProject throws for unmapped spec", () => {
     /Project mapping failed/
   );
 });
+
+test("mapSpecToAngularProject throws when angular.json has no projects", () => {
+  assert.throws(
+    () => mapSpecToAngularProject("/repo", "/repo/apps/manage/src/a.spec.ts", {}),
+    /has no projects/
+  );
+});

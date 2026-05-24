@@ -7,6 +7,7 @@ test("buildAngularCliCommand returns Angular CLI npm command", () => {
     workspaceRoot: "/repo",
     projectName: "manage",
     specRelativePath: "apps/manage/src/app/app.component.spec.ts",
+    watch: false,
   });
 
   assert.equal(command.command, "npm");
@@ -30,8 +31,48 @@ test("buildAngularCliCommand includes --testNamePattern when provided", () => {
     projectName: "manage",
     specRelativePath: "apps/manage/src/app/app.component.spec.ts",
     testNamePattern: "Manage should render",
+    watch: false,
   });
 
+  assert.deepEqual(command.args, [
+    "--prefix",
+    "/repo",
+    "run",
+    "test",
+    "--",
+    "--project",
+    "manage",
+    "--watch=false",
+    "--include",
+    "apps/manage/src/app/app.component.spec.ts",
+    "--testNamePattern",
+    "Manage should render",
+  ]);
+});
+
+test("buildAngularCliCommand enables watch mode when requested", () => {
+  const command = buildAngularCliCommand({
+    workspaceRoot: "/repo",
+    projectName: "manage",
+    specRelativePath: "apps/manage/src/app/app.component.spec.ts",
+    watch: true,
+  });
+
+  assert.equal(command.args.includes("--watch=true"), true);
+});
+
+test("buildAngularCliCommand supports template override placeholders", () => {
+  const command = buildAngularCliCommand({
+    workspaceRoot: "/repo",
+    projectName: "manage",
+    specRelativePath: "apps/manage/src/app/app.component.spec.ts",
+    testNamePattern: "Manage should render",
+    watch: false,
+    commandTemplate:
+      "npm --prefix {workspace} run test -- --project {project} {watch} --include {spec} --testNamePattern \"{testNamePattern}\"",
+  });
+
+  assert.equal(command.command, "npm");
   assert.deepEqual(command.args, [
     "--prefix",
     "/repo",
