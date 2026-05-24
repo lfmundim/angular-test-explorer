@@ -49,6 +49,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- `README.md` now includes explicit configuration reference and troubleshooting sections, and milestone wording aligned with prompt step 05 behavior.
 - `version.json` minor milestone advanced from `0.5` to `0.6` after clearing prompt milestone 05.
 - `README.md` now includes a `How to Use` section for the first runnable extension behavior, including setup and Testing view workflow.
 - `version.json` minor milestone advanced from `0.1` to `0.2` after clearing prompt milestone 01.

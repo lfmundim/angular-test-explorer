@@ -27,8 +27,6 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 
 ## How to Use
 
-Step 01 provides a runnable scaffold focused on Test Explorer wiring.
-
 1. Install dependencies:
    - `npm install`
 2. Build the extension:
@@ -43,7 +41,7 @@ Step 01 provides a runnable scaffold focused on Test Explorer wiring.
    - `Angular Test Explorer: Refresh Tests` to rediscover specs
    - `Angular Test Explorer: Run Selected Tests` to run selected items
 
-Current Step 04 behavior:
+Current behavior (implemented through prompt milestone 05):
 - Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
 - Populates the Testing tree with discovered spec files
 - Discovers in-file test cases from `describe` / `it` / `test` using a lightweight TypeScript AST pass and adds them as child test items
@@ -66,6 +64,36 @@ Current Step 04 behavior:
 - Supports cancellation by terminating the in-flight Angular CLI process
 - Automatically refreshes discovered tests (debounced) when `*.spec.ts`, `angular.json`, or extension settings change
 - Reports actionable diagnostics for missing Angular CLI/tooling context and project mapping failures
+
+## Configuration Reference
+
+- `angularTestExplorer.workspacePathOverride`
+  - Type: `string` (default: empty)
+  - Optional workspace root override used to locate `angular.json`. Relative paths resolve from the active workspace folder.
+- `angularTestExplorer.commandTemplateOverride`
+  - Type: `string` (default: empty)
+  - Optional test command template with placeholders:
+    `{workspace}`, `{project}`, `{spec}`, `{watch}`, `{testNamePattern}`.
+  - Quote placeholders when values may contain spaces, for example:
+    `--testNamePattern "{testNamePattern}"`.
+- `angularTestExplorer.defaultWatchMode`
+  - Type: `boolean` (default: `false`)
+  - Default watch value passed into Angular test execution.
+
+## Troubleshooting
+
+- No tests appear in the Testing view:
+  - Ensure the opened workspace contains files matching `**/*.spec.ts`.
+  - Run `Angular Test Explorer: Refresh Tests`.
+- Project mapping fails:
+  - Confirm the relevant workspace has a valid `angular.json`.
+  - If auto-detection picks the wrong root, set `angularTestExplorer.workspacePathOverride`.
+- Angular CLI command fails to start:
+  - Verify workspace dependencies are installed and `npm run test` works for the target project.
+  - If your workspace needs a different invocation shape, set `angularTestExplorer.commandTemplateOverride`.
+- Single-test run falls back to file-level:
+  - This occurs when the current Angular CLI context does not accept `--testNamePattern`.
+  - Check test output for the explicit fallback note.
 
 ## Screenshots (Placeholders)
 
