@@ -7,7 +7,7 @@
   "publisher": "kimdim",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lfmundim/kimdim-angular-test-explorer.git"
+    "url": "https://github.com/lfmundim/angular-test-explorer.git"
   },
   "engines": {
     "vscode": "^1.90.0"
