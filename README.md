@@ -1,4 +1,4 @@
-# kimdim-angular-test-explorer
+# Kate - Kimdim Angular Test Explorer
 
 VS Code extension concept to show and run Angular unit tests in Test Explorer by executing the Angular CLI test builder (`ng test`) instead of plain Vitest.
 
@@ -38,12 +38,14 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 6. In the new window, open a workspace that contains `*.spec.ts` files.
 7. Open the Testing view.
 8. Run:
-   - `Kimdim Angular Test Explorer: Refresh Tests` to rediscover specs
-   - `Kimdim Angular Test Explorer: Run Selected Tests` to run selected items
+   - `Kate: Refresh Tests` to rediscover specs
+   - `Kate: Run Selected Tests` to run selected items
 
 Current behavior (implemented through prompt milestone 05):
 - Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
-- Populates the Testing tree with discovered spec files
+- Populates the Testing tree grouped by Angular project, then spec files
+- Supports optional test-label trimming via setting:
+  - `angularTestExplorer.projectsBasePathTrim`
 - Discovers in-file test cases from `describe` / `it` / `test` using a lightweight TypeScript AST pass and adds them as child test items
 - Detects Angular workspace roots from `angular.json` per spec file
 - Supports optional workspace root override via setting:
@@ -61,6 +63,8 @@ Current behavior (implemented through prompt milestone 05):
   - `--testNamePattern <fullTestName>`
 - Falls back deterministically to file-level execution when current Angular CLI context does not support `--testNamePattern`, and reports fallback in output
 - Streams Angular CLI stdout/stderr to test run output and marks each test item as pass/fail/error
+- Normalizes streamed CLI output for cleaner Test Results rendering
+- Supports optional project-aware parallelization (different projects in parallel, same project serialized)
 - Supports cancellation by terminating the in-flight Angular CLI process
 - Automatically refreshes discovered tests (debounced) when `*.spec.ts`, `angular.json`, or extension settings change
 - Reports actionable diagnostics for missing Angular CLI/tooling context and project mapping failures
@@ -79,12 +83,19 @@ Current behavior (implemented through prompt milestone 05):
 - `angularTestExplorer.defaultWatchMode`
   - Type: `boolean` (default: `false`)
   - Default watch value passed into Angular test execution.
+- `angularTestExplorer.parallelizeByProject`
+  - Type: `boolean` (default: `true`)
+  - When enabled, file runs are parallelized per Angular project while preserving sequential execution within each project.
+- `angularTestExplorer.projectsBasePathTrim`
+  - Type: `string` (default: empty)
+  - Trims a matching path prefix from discovered spec labels in the Testing view.
+  - Example: `apps/tableside/projects` turns `apps/tableside/projects/customer/src/...` into `customer/src/...`.
 
 ## Troubleshooting
 
 - No tests appear in the Testing view:
   - Ensure the opened workspace contains files matching `**/*.spec.ts`.
-  - Run `Kimdim Angular Test Explorer: Refresh Tests`.
+  - Run `Kate: Refresh Tests`.
 - Project mapping fails:
   - Confirm the relevant workspace has a valid `angular.json`.
   - If auto-detection picks the wrong root, set `angularTestExplorer.workspacePathOverride`.

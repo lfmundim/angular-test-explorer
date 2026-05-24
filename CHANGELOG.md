@@ -5,6 +5,8 @@ All notable changes to this repository are documented here.
 ## [Unreleased]
 
 ### Added
+- Optional `angularTestExplorer.projectsBasePathTrim` setting to trim long path prefixes from Testing view labels.
+- `angularTestExplorer.parallelizeByProject` toggle to run different Angular projects in parallel while keeping same-project runs serialized.
 - CI publish automation for VS Code Marketplace:
   - prerelease publish on every push to `main`, with package version synced from `version.json` (Nerdbank.GitVersioning)
   - tag trigger on `v*` for prerelease publishing
@@ -54,6 +56,13 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- Angular CLI Test Results output now uses CRLF-safe streaming with carriage-return handling to avoid line-break skew while preserving ng/vitest table spacing and ANSI color output.
+- Test tree discovery now groups items by Angular project, with file labels trimmed relative to the project group.
+- CLI output streaming now normalizes ANSI/progress control sequences to reduce over-spaced Test Results rendering.
+- Marketplace/readme naming updated to "Kate - Kimdim Angular Test Explorer", with command titles renamed to `Kate: ...`.
+- Test run durations now use real CLI elapsed time instead of always reporting `0ms`.
+- File-level run results now propagate pass/fail/error status to discovered in-file test items in the Testing tree.
+- Failed test messages now surface useful error text from Angular CLI output instead of only reporting exit code.
 - Extension activation now guards initial test discovery errors so command registration remains available even when a workspace file fails discovery at startup.
 - Extension identity renamed across the repository to `kimdim-angular-test-explorer` / `Kimdim Angular Test Explorer` to avoid VS Marketplace display-name conflicts.
 - Marketplace publish job now builds extension output (`npm run build`) before `vsce publish`, fixing missing entrypoint failures in CI.
@@ -70,6 +79,7 @@ All notable changes to this repository are documented here.
 - `version.json` minor milestone advanced from `0.2` to `0.3` after clearing prompt milestone 02.
 - `version.json` minor milestone advanced from `0.3` to `0.4` after clearing prompt milestone 03.
 - `version.json` minor milestone advanced from `0.4` to `0.5` after clearing prompt milestone 04.
+- `version.json` minor milestone advanced from `0.6` to `0.7` for the Kate stabilization milestone.
 
 ## [0.1.0] - 2026-05-24
 ### Added

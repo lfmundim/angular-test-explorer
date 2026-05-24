@@ -1,6 +1,7 @@
 .github/**
 .git/**
 node_modules/**
+!node_modules/typescript/**
 out-test/**
 prompts/**
 src/**

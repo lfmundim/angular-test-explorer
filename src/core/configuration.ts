@@ -7,6 +7,8 @@ export interface ExtensionConfiguration {
   workspacePathOverride?: string;
   commandTemplateOverride?: string;
   defaultWatchMode: boolean;
+  parallelizeByProject: boolean;
+  projectsBasePathTrim?: string;
 }
 
 export function getExtensionConfiguration(): ExtensionConfiguration {
@@ -14,6 +16,8 @@ export function getExtensionConfiguration(): ExtensionConfiguration {
   const workspacePathOverride = config.get<string>("workspacePathOverride")?.trim();
   const commandTemplateOverride = config.get<string>("commandTemplateOverride")?.trim();
   const defaultWatchMode = config.get<boolean>("defaultWatchMode", false);
+  const projectsBasePathTrim = config.get<string>("projectsBasePathTrim")?.trim();
+  const parallelizeByProject = config.get<boolean>("parallelizeByProject", true);
 
   return {
     workspacePathOverride: workspacePathOverride && workspacePathOverride.length > 0 ? workspacePathOverride : undefined,
@@ -21,7 +25,10 @@ export function getExtensionConfiguration(): ExtensionConfiguration {
       commandTemplateOverride && commandTemplateOverride.length > 0
         ? commandTemplateOverride
         : undefined,
+    projectsBasePathTrim:
+      projectsBasePathTrim && projectsBasePathTrim.length > 0 ? projectsBasePathTrim : undefined,
     defaultWatchMode,
+    parallelizeByProject,
   };
 }
 

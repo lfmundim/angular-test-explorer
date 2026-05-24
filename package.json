@@ -1,6 +1,6 @@
 {
   "name": "kimdim-angular-test-explorer",
-  "displayName": "Kimdim Angular Test Explorer",
+  "displayName": "Kate - Kimdim Angular Test Explorer",
   "description": "Discover and run Angular spec files in the VS Code Testing view.",
   "icon": "icon.png",
   "version": "0.1.0",
@@ -39,17 +39,27 @@
           "type": "boolean",
           "default": false,
           "description": "Default watch mode passed to Angular CLI test runs."
+        },
+        "angularTestExplorer.projectsBasePathTrim": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path prefix to trim from discovered spec labels in the Testing view (for example: apps/tableside/projects)."
+        },
+        "angularTestExplorer.parallelizeByProject": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run tests from different Angular projects in parallel while keeping runs within the same project serialized."
         }
       }
     },
     "commands": [
       {
         "command": "angularTestExplorer.refreshTests",
-        "title": "Kimdim Angular Test Explorer: Refresh Tests"
+        "title": "Kate: Refresh Tests"
       },
       {
         "command": "angularTestExplorer.runSelectedTests",
-        "title": "Kimdim Angular Test Explorer: Run Selected Tests"
+        "title": "Kate: Run Selected Tests"
       }
     ]
   },
@@ -59,9 +69,11 @@
     "lint": "tsc -p ./ --noEmit",
     "test": "tsc -p tsconfig.test.json && node --test out-test/test/*.test.js"
   },
+  "dependencies": {
+    "typescript": "^5.5.4"
+  },
   "devDependencies": {
     "@types/node": "^20.14.10",
-    "@types/vscode": "^1.90.0",
-    "typescript": "^5.5.4"
+    "@types/vscode": "^1.90.0"
   }
 }
