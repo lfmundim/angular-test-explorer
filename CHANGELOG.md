@@ -54,6 +54,9 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- CI link-check job now allows empty-link scans (`failIfEmpty: false`) so docs without URLs do not fail the pipeline.
+- Test script now runs Node's test runner on `out-test/test/*.test.js` instead of a `**` glob, fixing CI bash glob expansion issues.
+- Marketplace publish job checkout now uses full git history (`fetch-depth: 0`) so Nerdbank.GitVersioning can compute version height reliably.
 - CI checkout now uses full git history (`fetch-depth: 0`) in jobs that run Nerdbank.GitVersioning, fixing version-resolution failures from shallow clones.
 - Markdown lint configuration now disables `MD022`, `MD032`, and `MD009` to match the repository's existing documentation formatting style and prevent non-functional CI failures.
 - `package.json` publisher updated from `local` to `kimdim` for Marketplace publishing.

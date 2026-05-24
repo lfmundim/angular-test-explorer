@@ -57,7 +57,7 @@
     "build": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "tsc -p ./ --noEmit",
-    "test": "tsc -p tsconfig.test.json && node --test out-test/test/**/*.test.js"
+    "test": "tsc -p tsconfig.test.json && node --test out-test/test/*.test.js"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",

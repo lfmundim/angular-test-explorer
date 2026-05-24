@@ -96,6 +96,7 @@ jobs:
       - name: Check markdown links
         uses: lycheeverse/lychee-action@v2
         with:
+          failIfEmpty: false
           args: >-
             --no-progress
             --accept 200,206,429
@@ -111,6 +112,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
