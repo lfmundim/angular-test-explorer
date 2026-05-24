@@ -24,7 +24,3 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 - Replacing Angular test infrastructure
 - Custom bundling pipeline
 - Snapshot tooling beyond what Angular CLI already supports
-
-## License
-
-MIT
