@@ -54,6 +54,8 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- CI checkout now uses full git history (`fetch-depth: 0`) in jobs that run Nerdbank.GitVersioning, fixing version-resolution failures from shallow clones.
+- Markdown lint configuration now disables `MD022`, `MD032`, and `MD009` to match the repository's existing documentation formatting style and prevent non-functional CI failures.
 - `package.json` publisher updated from `local` to `kimdim` for Marketplace publishing.
 - `README.md` now includes explicit configuration reference and troubleshooting sections, and milestone wording aligned with prompt step 05 behavior.
 - `version.json` minor milestone advanced from `0.5` to `0.6` after clearing prompt milestone 05.
