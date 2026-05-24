@@ -54,6 +54,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- Marketplace publish job now builds extension output (`npm run build`) before `vsce publish`, fixing missing entrypoint failures in CI.
 - CI link-check job now allows empty-link scans (`failIfEmpty: false`) so docs without URLs do not fail the pipeline.
 - Test script now runs Node's test runner on `out-test/test/*.test.js` instead of a `**` glob, fixing CI bash glob expansion issues.
 - Marketplace publish job checkout now uses full git history (`fetch-depth: 0`) so Nerdbank.GitVersioning can compute version height reliably.

@@ -140,6 +140,9 @@ jobs:
           export VERSION
           node -e 'const fs=require("fs"); const p="package.json"; const j=JSON.parse(fs.readFileSync(p,"utf8")); j.version=process.env.VERSION; fs.writeFileSync(p, JSON.stringify(j, null, 2) + "\n");'
 
+      - name: Build extension output
+        run: npm run build
+
       - name: Publish prerelease to VS Code Marketplace
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_channel == 'prerelease')
         run: npx @vscode/vsce publish --pre-release
