@@ -1,13 +1,13 @@
 {
-  "name": "angular-test-explorer",
-  "displayName": "Angular Test Explorer",
+  "name": "kimdim-angular-test-explorer",
+  "displayName": "Kimdim Angular Test Explorer",
   "description": "Discover and run Angular spec files in the VS Code Testing view.",
   "icon": "icon.png",
   "version": "0.1.0",
   "publisher": "kimdim",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lfmundim/angular-test-explorer.git"
+    "url": "https://github.com/lfmundim/kimdim-angular-test-explorer.git"
   },
   "engines": {
     "vscode": "^1.90.0"
@@ -23,7 +23,7 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Angular Test Explorer",
+      "title": "Kimdim Angular Test Explorer",
       "properties": {
         "angularTestExplorer.workspacePathOverride": {
           "type": "string",
@@ -45,11 +45,11 @@
     "commands": [
       {
         "command": "angularTestExplorer.refreshTests",
-        "title": "Angular Test Explorer: Refresh Tests"
+        "title": "Kimdim Angular Test Explorer: Refresh Tests"
       },
       {
         "command": "angularTestExplorer.runSelectedTests",
-        "title": "Angular Test Explorer: Run Selected Tests"
+        "title": "Kimdim Angular Test Explorer: Run Selected Tests"
       }
     ]
   },

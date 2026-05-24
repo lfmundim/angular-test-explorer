@@ -22,11 +22,11 @@ const REFRESH_DEBOUNCE_MS = 250;
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const controller = vscode.tests.createTestController(
     "angularTestExplorerController",
-    "Angular Test Explorer"
+    "Kimdim Angular Test Explorer"
   );
   context.subscriptions.push(controller);
 
-  const output = vscode.window.createOutputChannel("Angular Test Explorer");
+  const output = vscode.window.createOutputChannel("Kimdim Angular Test Explorer");
   context.subscriptions.push(output);
 
   controller.createRunProfile(

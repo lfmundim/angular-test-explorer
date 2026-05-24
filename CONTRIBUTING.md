@@ -1,7 +1,7 @@
 # Contributing
 
 ## Scope
-This repository contains prompt packs for building the Angular Test Explorer extension. Keep changes focused, explicit, and sequential.
+This repository contains prompt packs for building the Kimdim Angular Test Explorer extension. Keep changes focused, explicit, and sequential.
 
 ## How To Contribute
 1. Open an issue describing the change.

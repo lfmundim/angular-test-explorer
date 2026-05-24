@@ -1,4 +1,4 @@
-# angular-test-explorer
+# kimdim-angular-test-explorer
 
 VS Code extension concept to show and run Angular unit tests in Test Explorer by executing the Angular CLI test builder (`ng test`) instead of plain Vitest.
 
@@ -38,8 +38,8 @@ Provide a native Test Explorer experience for Angular workspaces while preservin
 6. In the new window, open a workspace that contains `*.spec.ts` files.
 7. Open the Testing view.
 8. Run:
-   - `Angular Test Explorer: Refresh Tests` to rediscover specs
-   - `Angular Test Explorer: Run Selected Tests` to run selected items
+   - `Kimdim Angular Test Explorer: Refresh Tests` to rediscover specs
+   - `Kimdim Angular Test Explorer: Run Selected Tests` to run selected items
 
 Current behavior (implemented through prompt milestone 05):
 - Discovers files using `**/*.spec.ts` across workspace folders (monorepo-safe)
@@ -84,7 +84,7 @@ Current behavior (implemented through prompt milestone 05):
 
 - No tests appear in the Testing view:
   - Ensure the opened workspace contains files matching `**/*.spec.ts`.
-  - Run `Angular Test Explorer: Refresh Tests`.
+  - Run `Kimdim Angular Test Explorer: Refresh Tests`.
 - Project mapping fails:
   - Confirm the relevant workspace has a valid `angular.json`.
   - If auto-detection picks the wrong root, set `angularTestExplorer.workspacePathOverride`.
@@ -116,7 +116,7 @@ Build and validate before packaging:
    - `npx @vscode/vsce package --pre-release`
 
 Expected artifact:
-- `./angular-test-explorer-<version>.vsix`
+- `./kimdim-angular-test-explorer-<version>.vsix`
 
 Notes:
 - CI syncs `package.json` version from `version.json` using Nerdbank.GitVersioning before packaging.
