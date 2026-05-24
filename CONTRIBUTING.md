@@ -16,6 +16,11 @@ This repository contains prompt packs for building the Angular Test Explorer ext
 - Avoid conflicting instructions across prompts.
 - Prefer deterministic requirements over vague guidance.
 
+## Versioning Policy
+- New feature: bump **minor** version.
+- Bugfix: no minor bump; patch is derived from git height via GitVersioning.
+- Major overhaul: bump **major** version.
+
 ## Commit Style
 Use small commits with clear messages, for example:
 - `docs: clarify project mapping requirement`
