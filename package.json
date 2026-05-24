@@ -2,6 +2,7 @@
   "name": "angular-test-explorer",
   "displayName": "Angular Test Explorer",
   "description": "Discover and run Angular spec files in the VS Code Testing view.",
+  "icon": "icon.png",
   "version": "0.1.0",
   "publisher": "local",
   "engines": {

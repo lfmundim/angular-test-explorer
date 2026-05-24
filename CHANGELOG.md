@@ -18,6 +18,7 @@ All notable changes to this repository are documented here.
   - pass/fail/error test result mapping from CLI process outcomes
 - Unit tests for Angular project mapping and Angular CLI command construction behavior.
 - Unit tests for spec test discovery and single-test item identity parsing.
+- Marketplace icon wiring in `package.json` with repository root `icon.png`.
 - Step 01 extension scaffold with a TypeScript-only VS Code Testing API integration:
   - `package.json` activation events and commands for Testing view usage
   - `src/extension.ts` with `TestController` bootstrap and a `**/*.spec.ts` discovery flow
