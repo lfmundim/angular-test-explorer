@@ -1,5 +1,5 @@
 # Kate - Kimdim Angular Test Explorer
-[![CI](https://github.com/lfmundim/angular-test-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/lfmundim/angular-test-explorer/actions/workflows/ci.yml)
+[![CI](https://github.com/lfmundim/kate/actions/workflows/ci.yml/badge.svg)](https://github.com/lfmundim/kate/actions/workflows/ci.yml)
 [![VS Marketplace](https://vsmarketplacebadges.dev/version-short/kimdim.kimdim-angular-test-explorer.svg)](https://marketplace.visualstudio.com/items?itemName=kimdim.kimdim-angular-test-explorer)
 
 <p align="center">
