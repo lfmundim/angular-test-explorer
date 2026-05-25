@@ -56,6 +56,7 @@ All notable changes to this repository are documented here.
 - Explicit quality rule in `AGENTS.md` requiring automated tests for testable code behavior.
 
 ### Changed
+- CI workflow triggers now run only for code-relevant changes (`src/**`, `test/**`, workflow files, and core build/config manifests), so documentation-only edits like `.md` files no longer start CI runs.
 - Angular CLI Test Results output now uses CRLF-safe streaming with carriage-return handling to avoid line-break skew while preserving ng/vitest table spacing and ANSI color output.
 - Test tree discovery now groups items by Angular project, with file labels trimmed relative to the project group.
 - CLI output streaming now normalizes ANSI/progress control sequences to reduce over-spaced Test Results rendering.
